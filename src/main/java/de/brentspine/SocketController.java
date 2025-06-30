@@ -313,7 +313,12 @@ public class SocketController {
 
     private void handleChatMessage(JSONObject peer, String chatMessage) throws InterruptedException {
         Peer peerWrapper = Peer.fromJson(peer);
-        Auth peerAuth = Auth.fromJson(peer.optJSONObject("auth"));
+        Auth peerAuth = null;
+        try {
+            peerAuth = Auth.fromJson(peer.optJSONObject("auth", null));
+        } catch (Exception ignored) {
+
+        }
         if(!chatMessage.startsWith("-")) {
             // Check if peer["auth"] exists, is not null and an instance of JSON object
             if (!(peer.has("auth") && peer.get("auth") instanceof JSONObject)) return;
